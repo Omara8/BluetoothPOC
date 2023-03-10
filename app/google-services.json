@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "168461218276",
+    "project_id": "bluetoothpoc-98584",
+    "storage_bucket": "bluetoothpoc-98584.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168461218276:android:cc4cc50343213ef30a57f1",
+        "android_client_info": {
+          "package_name": "com.example.bluetoothpoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168461218276-85j53u7t78skcqapaudfoiah5ksqjird.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaDAh07iaUkgPbNH0zZfHY8izpKE60exw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168461218276-85j53u7t78skcqapaudfoiah5ksqjird.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

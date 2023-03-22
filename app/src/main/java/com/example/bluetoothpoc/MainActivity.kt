@@ -27,6 +27,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -45,13 +46,21 @@ class MainActivity : AppCompatActivity() {
     private var companion: MaterialButton? = null
     private lateinit var locationUtils: LocationUtils
 
+
+    val android13Permissions = arrayOf(
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.POST_NOTIFICATIONS,
+    )
+
     @RequiresApi(Build.VERSION_CODES.S)
     val android12Permissions = arrayOf(
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_CONNECT,
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
@@ -64,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
     )
 
-    private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) android12Permissions else android11AndLowerPermissions
+    private val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) android13Permissions else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S || Build.VERSION.SDK_INT == Build.VERSION_CODES.S_V2) android12Permissions else android11AndLowerPermissions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,17 +194,28 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (checkPermissionsGranted(this, permissions)) {
-            true -> scan?.isEnabled = true
-            false -> Toast.makeText(
-                this,
-                "Some permissions were not granted, please grant them and try again",
-                Toast.LENGTH_LONG
-            ).show()
+            true -> {
+                if (requestCode != LOCATION_PERMISSION_REQUEST_CODE)
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+                else
+                    scan?.isEnabled = true
+            }
+            false -> {
+                checkPermissions(
+                    this, permissions, BLE_PERMISSION_REQUEST_CODE
+                )
+                Toast.makeText(
+                    this,
+                    "Some permissions were not granted, please grant them and try again",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 
     companion object {
         private const val BLE_PERMISSION_REQUEST_CODE = 1
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 10
     }
 
 }

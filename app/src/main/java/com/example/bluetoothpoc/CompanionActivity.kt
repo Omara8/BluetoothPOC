@@ -16,6 +16,8 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
@@ -28,6 +30,8 @@ class CompanionActivity: AppCompatActivity() {
         setContentView(R.layout.activity_companion)
 
         deviceManager = getSystemService(Context.COMPANION_DEVICE_SERVICE) as CompanionDeviceManager
+
+//        deviceManager.myAssociations
 
         startCompanionAppPair()
 
@@ -72,7 +76,6 @@ class CompanionActivity: AppCompatActivity() {
                             device.createBond()
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
                                 deviceManager.startObservingDevicePresence(device.address)
-                            this.startService(Intent(this, Companion::class.java))
                         }
                         // Continue to interact with the paired device.
                     }
